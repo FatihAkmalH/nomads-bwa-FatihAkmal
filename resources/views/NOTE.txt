@@ -1,0 +1,29 @@
+database migration : 
+nama db : nomads
+tabel : travel_packages, galleries, transactions, transaction_details
+
+MIGRATION :
+1. create_travel_packages_table --create=travel_packages : Bigincreaments('id'), string(title,slug,location),longtext(about),string(featured_event, language, foods), date(departure_date), string(duration, type), integer(price), softdeletes.
+
+2. create_galleries_table --create=galleries : Bigincreaments('id'), integer('travel_packages_id'), text(image), softdeletes()
+
+3. create_transactions_table --create=transactions : Bigincreaments('id'), integer(travel_packages_id), integer(users_id)->nullable(), integer(additional_visa, transaction_total), string('transaction_status), softdelete()
+
+4. create_transaction_details_table --create=transaction_details : Bigincreaments('id'), integer(transactions_id), string(username, nationality), boolean(is_visa), date(doe_passport), soft deletes()
+
+5. add_roles_field_to_users_table --table=users :  
+up() = string('roles')->default(USER);
+down = dropcolumn('roles');
+// USER ADMIN
+
+MIDDLEWARE :
+IsAdmin :
+	if(Auth::user() && Auth::user()->roles == 'ADMIN'){
+	return $next($request);
+}
+return redirect('/');
+
+lalu ke kernel
+
+
+
